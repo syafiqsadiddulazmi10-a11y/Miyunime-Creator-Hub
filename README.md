@@ -173,4 +173,4 @@ miyunime-creator-hub/
 
 ## Lisensi
 
-Proyek ini bersifat internal untuk **Miyunime**. Seluruh hak dilindungi. _(Ubah sesuai kebutuhan, mis. MIT.)_
+Proyek ini bersifat internal untuk **Miyunime**. 
