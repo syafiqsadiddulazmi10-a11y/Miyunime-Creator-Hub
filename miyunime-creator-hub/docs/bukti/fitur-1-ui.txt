@@ -1,0 +1,6 @@
+Judul kosong -> Judul wajib diisi dan maksimal 120 karakter
+Simpan -> Konten disimpan
+Status baru -> Draft
+Tautan salah -> Tautan Instagram tidak valid. Gunakan tautan postingan, contoh: https://www.instagram.com/p/XXXX/
+Status akhir -> Sudah diupload | tombol upload tersisa: 0
+Admin melihat form tambah konten: 0 | jumlah konten terlihat: 12
