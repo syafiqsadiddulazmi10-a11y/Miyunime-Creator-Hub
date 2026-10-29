@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Miyunime Creator Hub</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Miyunime Creator Hub</h1>
+    <div class="who" id="who" hidden>
+      <span id="who-name"></span>
+      <button type="button" id="logout">Keluar</button>
+    </div>
+  </header>
+  <p id="notice" role="status" hidden></p>
+  <section id="login" class="login" hidden>
+    <form id="login-form" class="form" novalidate>
+      <h2>Masuk</h2>
+      <label>Email<input name="Email" type="email" autocomplete="username" placeholder="aiko@miyunime.id"></label>
+      <label>Kata sandi<input name="Password" type="password" autocomplete="current-password"></label>
+      <button class="primary" type="submit">Masuk</button>
+      <p class="meta">Akun demo: admin@miyunime.id atau aiko@miyunime.id, kata sandi miyunime123.</p>
+    </form>
+  </section>
+  <main id="panels"></main>
+  <script src="/app.js"></script>
+  <script src="/notifications.js"></script>
+  <script src="/content.js"></script>
+  <script src="/dashboard.js"></script>
+  <script src="/review.js"></script>
+  <script src="/quota-settings.js"></script>
+  <script src="/report.js"></script>
+  <script src="/activity.js"></script>
+  <script>Start()</script>
+</body>
+</html>

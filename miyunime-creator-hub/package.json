@@ -1,0 +1,14 @@
+{
+  "name": "miyunime-creator-hub",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "seed": "node src/seed.ts",
+    "start": "node src/server-main.ts",
+    "test": "node --test \"test/*.test.ts\""
+  }
+}

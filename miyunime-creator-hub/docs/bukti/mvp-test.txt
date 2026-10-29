@@ -1,0 +1,90 @@
+▶ Fitur 7: log aktivitas dan pengingat kuota
+  ✔ AC1: setiap perubahan status konten dan kuota tercatat dengan pelaku dan waktunya (59.81929ms)
+  ✔ AC2: tindakan yang ditolak tidak tercatat (31.216207ms)
+  ✔ AC3: creator hanya melihat aktivitasnya sendiri, admin melihat semuanya (13.791332ms)
+  ✔ AC4: batas jumlah baris dipatuhi dan nilai tidak valid memakai bawaan (7.506173ms)
+  ✔ AC5: pengingat creator: tenggat dekat, terlambat, dan perlu revisi (21.559539ms)
+  ✔ AC6: kuota yang sudah terpenuhi tidak menghasilkan pengingat tenggat (12.858285ms)
+  ✔ AC7: pengingat admin merangkum review tertunda dan creator bermasalah (24.635666ms)
+✔ Fitur 7: log aktivitas dan pengingat kuota (174.764896ms)
+▶ Fitur 6: autentikasi dan otorisasi berbasis peran
+  ✔ AC1: login dengan email dan sandi benar menghasilkan token dan identitas peran (90.203598ms)
+  ✔ AC2: sandi salah, email tidak dikenal, dan input kosong ditolak tanpa membocorkan akun mana yang ada (64.680285ms)
+  ✔ AC3: tanpa token, token palsu, atau header X-User-Id lama tidak memberi akses (401) (20.316751ms)
+  ✔ AC4: token dari login bisa dipakai, dan logout mencabutnya (89.380416ms)
+  ✔ AC5: sesi kedaluwarsa ditolak (95.06076ms)
+  ✔ AC6: kata sandi disimpan sebagai hash bergaram, bukan teks asli (160.64284ms)
+  ✔ AC7: pembatasan peran tetap berlaku lewat token (creator tidak bisa membuka laporan admin) (16.784473ms)
+  ✔ AC8: isi permintaan bukan JSON dijawab 400, bukan 500 (3.404727ms)
+  ✔ AC9: login dan logout tercatat di log aktivitas (69.193578ms)
+✔ Fitur 6: autentikasi dan otorisasi berbasis peran (614.345717ms)
+▶ Fitur 1: input konten pra-upload dan pasca-upload
+  ✔ AC1: konten baru berstatus DRAFT, atau SCHEDULED jika ada jadwal, atas nama pembuatnya (31.978381ms)
+  ✔ AC2: judul kosong atau format tidak valid ditolak dengan pesan Indonesia (9.821155ms)
+  ✔ AC3: tandai UPLOADED dengan tautan valid mengisi UploadedAt dari jam server (21.540392ms)
+  ✔ AC4: tautan kosong atau bukan tautan Instagram ditolak dan status tidak berubah (36.951245ms)
+  ✔ AC5: konten UPLOADED tidak bisa ditandai ulang atau dihapus, konten belum upload bisa dihapus (32.602639ms)
+  ✔ AC6: creator hanya mengakses miliknya, tanpa identitas 401, admin tidak bisa membuat (38.954066ms)
+✔ Fitur 1: input konten pra-upload dan pasca-upload (175.636436ms)
+▶ Skema database dan migrasi
+  ✔ database lama dimigrasi tanpa kehilangan konten dan mulai menerima status review (25.38844ms)
+  ✔ database baru langsung berskema terbaru dan menolak status di luar daftar (1.057726ms)
+  ✔ menghapus konten ikut menghapus riwayat reviewnya, dan keputusan di luar APPROVED atau REVISION ditolak (1.00273ms)
+✔ Skema database dan migrasi (28.584502ms)
+▶ Fitur 8: riwayat konten, filter, dan tautan draft
+  ✔ AC1: creator melihat riwayat miliknya saja, terbaru di atas (22.995815ms)
+  ✔ AC2: filter per periode memakai waktu upload (atau waktu dibuat jika belum upload) (18.352489ms)
+  ✔ AC3: filter status, format, dan cari judul (karakter khusus % dan _ dianggap huruf biasa) (31.215554ms)
+  ✔ AC4: filter tidak valid ditolak 400 dengan pesan Indonesia (33.457268ms)
+  ✔ AC5: filter creator hanya berlaku untuk admin; creator tidak bisa mengintip milik orang lain (13.657904ms)
+  ✔ AC6: tautan aset/draft opsional, harus http(s) valid, dan ikut tersimpan (44.901275ms)
+  ✔ AC7: tautan draft bisa diperbaiki saat revisi dan dihitung sebagai perubahan (13.471482ms)
+✔ Fitur 8: riwayat konten, filter, dan tautan draft (186.380876ms)
+▶ Fitur 3: pengaturan kuota oleh admin
+  ✔ AC1: admin menetapkan kuota dan server menghitung akhir periode (85.521775ms)
+  ✔ AC2: akhir periode bulanan tepat di batas bulan, tahun, dan bulan pendek (58.010733ms)
+  ✔ AC3: input tidak valid ditolak dan tidak ada kuota yang tersimpan (109.197054ms)
+  ✔ AC4: periode yang tumpang tindih untuk creator yang sama ditolak (121.507194ms)
+  ✔ AC5: hanya admin yang mengatur kuota, creator hanya melihat kuotanya sendiri (75.387794ms)
+  ✔ AC6: hanya kuota masa depan yang bisa dihapus, kuota berjalan menjadi dasar evaluasi (60.353559ms)
+  ✔ AC7: kuota baru langsung terbaca dashboard dan menghitung konten yang diupload (integrasi fitur 1 dan 2) (67.409231ms)
+✔ Fitur 3: pengaturan kuota oleh admin (579.392238ms)
+▶ Fitur 2: dashboard kuota
+  ✔ AC1: dashboard admin memuat target, terupload, sisa, status, dan periode tiap creator (73.457745ms)
+  ✔ AC2: aturan status FULFILLED, LATE, IN_PROGRESS, dan NO_QUOTA (59.815001ms)
+  ✔ AC3: hanya konten UPLOADED bertautan di dalam periode yang dihitung (50.071757ms)
+  ✔ AC4: ringkasan admin benar dan creator terlambat diurutkan paling atas (105.028598ms)
+  ✔ AC5: progres creator naik setelah menandai konten diupload (integrasi fitur 1) (73.406172ms)
+  ✔ AC6: akses dashboard dibatasi sesuai peran (62.011482ms)
+  ✔ AC7: kuota berjalan dipakai ketimbang kuota lama (60.025052ms)
+✔ Fitur 2: dashboard kuota (485.362739ms)
+▶ Fitur 5: ekspor laporan CSV
+  ✔ AC1: admin mengunduh laporan konten sebagai CSV yang bisa dibuka Excel (75.601941ms)
+  ✔ AC2: filter creator, status, format, tanggal, dan pencarian judul, termasuk gabungannya (101.34071ms)
+  ✔ AC3: filter yang tidak valid ditolak 400 dengan pesan Indonesia (93.514643ms)
+  ✔ AC4: sel CSV dikutip benar dan rumus spreadsheet dinetralkan (CSV injection) (47.18857ms)
+  ✔ AC5: laporan kuota memuat angka yang sama dengan dashboard admin (49.207433ms)
+  ✔ AC6: laporan hanya untuk admin (79.184652ms)
+✔ Fitur 5: ekspor laporan CSV (447.613853ms)
+▶ Fitur 4: review dan persetujuan konten
+  ✔ AC1: creator mengajukan konten miliknya, DRAFT maupun SCHEDULED menjadi SUBMITTED (131.294704ms)
+  ✔ AC2: konten yang menunggu review terkunci: tidak bisa diupload, dihapus, atau diajukan lagi (144.483044ms)
+  ✔ AC3: admin menyetujui, lalu creator bisa menandai upload dan konten tidak perlu diajukan lagi (84.087759ms)
+  ✔ AC4: siklus revisi: catatan wajib, creator memperbaiki lalu mengajukan ulang hingga disetujui (101.65432ms)
+  ✔ AC5: aturan keputusan review: hanya admin, hanya konten SUBMITTED, keputusan dan catatan valid (82.177508ms)
+  ✔ AC6: riwayat review tercatat berurutan, dilihat pemilik dan admin saja (68.460575ms)
+  ✔ AC7: review bersifat opsional dan kuota tetap hanya menghitung konten UPLOADED (integrasi fitur 1 dan 2) (103.049337ms)
+✔ Fitur 4: review dan persetujuan konten (718.183356ms)
+▶ Aturan bisnis murni (unit): tautan, kuota, dan validasi konten
+  ✔ IsInstagramLink hanya menerima tautan postingan https di instagram.com (1.02383ms)
+  ✔ ComputeQuotaStatus: tepat di batas akhir periode masih IN_PROGRESS, 1 milidetik setelahnya LATE (0.264102ms)
+  ✔ ParseContentInput: batas panjang judul dan caption, serta jadwal dinormalkan ke UTC (0.600737ms)
+✔ Aturan bisnis murni (unit): tautan, kuota, dan validasi konten (2.868695ms)
+ℹ tests 62
+ℹ suites 10
+ℹ pass 62
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5652.72241
