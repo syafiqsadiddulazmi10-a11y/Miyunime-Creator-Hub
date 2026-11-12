@@ -1,3 +1,8 @@
+# fly.toml app configuration file generated for miyunime-creator-hub on 2026-11-12T04:43:13Z
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
 app = 'miyunime-creator-hub'
 primary_region = 'ams'
 
@@ -5,9 +10,9 @@ primary_region = 'ams'
   dockerfile = 'Dockerfile'
 
 [env]
-  PORT = '3000'
-  HOST = '0.0.0.0'
   DATABASE_FILE = '/data/miyunime.db'
+  HOST = '0.0.0.0'
+  PORT = '3000'
 
 [[mounts]]
   source = 'miyunime_data'
@@ -21,13 +26,14 @@ primary_region = 'ams'
   min_machines_running = 1
 
   [[http_service.checks]]
-    method = 'GET'
-    path = '/healthz'
     interval = '30s'
     timeout = '5s'
     grace_period = '10s'
+    method = 'GET'
+    path = '/healthz'
 
 [[vm]]
   memory = '256mb'
   cpu_kind = 'shared'
   cpus = 1
+  memory_mb = 256
