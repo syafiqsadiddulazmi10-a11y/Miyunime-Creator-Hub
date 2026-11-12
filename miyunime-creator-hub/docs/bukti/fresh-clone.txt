@@ -1,0 +1,91 @@
+BUKTI FRESH CLONE, INSTALL, BUILD, TEST, RUN
+=============================================
+Tanggal      : 2026-11-04T03:40Z
+Lingkungan   : v22.22.2, Linux 6.18.44-fc-v233, Chromium headless (Playwright)
+Repo         : remote Git LOKAL (bare repo), bukan GitHub, karena lingkungan ini tidak punya akses internet
+Alur         : baseline (zip asli) -> branch feat/mvp-final -> verifikasi branch (lulus) -> merge "pull request" ke main -> verifikasi main
+Commit diuji : 039cca5 (main). Berkas bukti ini ditambahkan setelah commit tersebut.
+Perintah     : E2E=1 bash scripts/verify-fresh-clone.sh <repo> main
+Uji negatif  : skrip sengaja diuji dengan e2e yang dirusak; hasilnya FAIL dan exit code non-nol (bukan lulus palsu)
+Tidak diuji  : docker build (Docker tidak tersedia), GitHub Actions (baru berjalan setelah repo di-push ke GitHub), PR sungguhan di GitHub
+
+
+>> 1. Clone bersih (main)
+PASS  git clone (039cca5 - fix(scripts): status e2e tidak lagi tertutup oleh pipe ke tail)
+PASS  tidak ada data lokal/rahasia yang ikut ter-commit
+PASS  tidak ada .env, node_modules, atau data di git
+
+>> 2. Versi Node
+v22.22.2
+PASS  Node v22.22.2 memenuhi syarat >= 22.18
+
+>> 3. Install (npm ci)
+
+up to date in 277ms
+PASS  npm ci
+PASS  npm audit: 0 kerentanan (trivial: proyek tanpa dependensi)
+
+>> 4. Build
+
+> miyunime-creator-hub@1.0.0 build
+> node scripts/build.mjs
+
+[1/3] Sintaks UI: 9 berkas JS valid
+[2/3] Modul server: 12 modul termuat tanpa galat
+[3/3] Paket deploy: dist/ siap (jalankan: cd dist && npm run seed && npm start)
+PASS  npm run build (dist/ terbentuk)
+
+>> 5. Unit test
+tests=77 pass=77 fail=0
+PASS  npm test: 77/77 lulus, 0 gagal
+
+>> 6. Jalankan dari sumber (npm start)
+PASS  source: /healthz sehat
+PASS  source: halaman utama 200
+PASS  source: API tanpa login 401
+PASS  source: login admin berhasil
+PASS  source: dashboard admin memuat 4 creator
+PASS  source: header CSP aktif
+
+>> 7. Jalankan dari hasil build (deploy dist/)
+PASS  dist: /healthz sehat
+PASS  dist: halaman utama 200
+PASS  dist: API tanpa login 401
+PASS  dist: login admin berhasil
+PASS  dist: dashboard admin memuat 4 creator
+PASS  dist: header CSP aktif
+
+>> 8. Uji UI end-to-end (opsional: E2E=1)
+JS errors: []
+
+32/32 lulus
+PASS  e2e Playwright (32/32 lulus)
+
+>> 9. Docker build (opsional)
+SKIP  docker build (docker tidak terpasang di mesin ini)
+
+================ RINGKASAN ================
+PASS  git clone (039cca5 - fix(scripts): status e2e tidak lagi tertutup oleh pipe ke tail)
+PASS  tidak ada data lokal/rahasia yang ikut ter-commit
+PASS  tidak ada .env, node_modules, atau data di git
+PASS  Node v22.22.2 memenuhi syarat >= 22.18
+PASS  npm ci
+PASS  npm audit: 0 kerentanan (trivial: proyek tanpa dependensi)
+PASS  npm run build (dist/ terbentuk)
+PASS  npm test: 77/77 lulus, 0 gagal
+PASS  source: /healthz sehat
+PASS  source: halaman utama 200
+PASS  source: API tanpa login 401
+PASS  source: login admin berhasil
+PASS  source: dashboard admin memuat 4 creator
+PASS  source: header CSP aktif
+PASS  dist: /healthz sehat
+PASS  dist: halaman utama 200
+PASS  dist: API tanpa login 401
+PASS  dist: login admin berhasil
+PASS  dist: dashboard admin memuat 4 creator
+PASS  dist: header CSP aktif
+PASS  e2e Playwright (32/32 lulus)
+SKIP  docker build (docker tidak terpasang di mesin ini)
+Repo: /tmp/sim/origin.git (branch main)
+HASIL: SEMUA LANGKAH LULUS

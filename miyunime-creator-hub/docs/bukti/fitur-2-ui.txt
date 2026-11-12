@@ -1,0 +1,8 @@
+[Admin] ringkasan: Dari 4 creator: 1 terlambat, 1 dalam progres, 1 terpenuhi, 1 belum punya kuota. Total 8 konten sudah diupload pada periode kuota masing-masing.
+[Admin] urutan   : Sari = Terlambat | Aiko = Dalam progres | Dewi = Belum ada kuota | Raka = Terpenuhi
+[Aiko sebelum]  : Kamu sudah mengupload 3 dari 4 konten pada periode 1 Okt 2026 sampai 31 Okt 2026. | Dalam progres
+[Aiko sesudah]  : Kamu sudah mengupload 4 dari 4 konten pada periode 1 Okt 2026 sampai 31 Okt 2026. | Terpenuhi | Kuota periode ini terpenuhi.
+[Admin sesudah] : Dari 4 creator: 1 terlambat, 2 terpenuhi, 1 belum punya kuota. Total 9 konten sudah diupload pada periode kuota masing-masing.
+[Admin sesudah] : Sari = Terlambat | Dewi = Belum ada kuota | Aiko = Terpenuhi | Raka = Terpenuhi
+[Dewi]          : Admin belum menetapkan kuota untukmu. Hubungi admin Miyunime.
+[Mobile 390px] gulir horizontal: false

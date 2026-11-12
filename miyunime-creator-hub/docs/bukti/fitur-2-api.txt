@@ -1,0 +1,59 @@
+$ GET /api/dashboard/admin  (X-User-Id: 1, data seed)
+{
+  "Summary": {
+    "TotalCreators": 4,
+    "CreatorsFulfilled": 1,
+    "CreatorsInProgress": 1,
+    "CreatorsLate": 1,
+    "CreatorsWithoutQuota": 1,
+    "TotalContentUploadedThisPeriod": 8
+  },
+  "Creators": [
+    {
+      "Name": "Sari",
+      "TargetCount": 5,
+      "UploadedCount": 2,
+      "RemainingCount": 3,
+      "QuotaStatus": "LATE"
+    },
+    {
+      "Name": "Aiko",
+      "TargetCount": 4,
+      "UploadedCount": 3,
+      "RemainingCount": 1,
+      "QuotaStatus": "IN_PROGRESS"
+    },
+    {
+      "Name": "Dewi",
+      "TargetCount": 0,
+      "UploadedCount": 0,
+      "RemainingCount": 0,
+      "QuotaStatus": "NO_QUOTA"
+    },
+    {
+      "Name": "Raka",
+      "TargetCount": 3,
+      "UploadedCount": 3,
+      "RemainingCount": 0,
+      "QuotaStatus": "FULFILLED"
+    }
+  ]
+}
+
+$ GET /api/dashboard/me  (X-User-Id: 2, Aiko)
+{
+    "UserId": 2,
+    "Name": "Aiko",
+    "InstagramHandle": "@aiko.draws",
+    "QuotaId": 1,
+    "PeriodType": "MONTHLY",
+    "StartDate": "2026-10-01T00:00:00.000Z",
+    "EndDate": "2026-10-31T23:59:59.999Z",
+    "TargetCount": 4,
+    "UploadedCount": 3,
+    "RemainingCount": 1,
+    "QuotaStatus": "IN_PROGRESS"
+}
+
+$ GET /api/dashboard/admin  (X-User-Id: 2, creator)
+{"Message":"Dashboard ini hanya untuk admin"}  -> HTTP 403
