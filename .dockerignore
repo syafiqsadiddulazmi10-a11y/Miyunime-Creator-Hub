@@ -1,0 +1,11 @@
+.git
+.github
+log
+test.mp4
+miyunime-creator-hub/node_modules
+miyunime-creator-hub/data
+miyunime-creator-hub/dist
+miyunime-creator-hub/docs
+miyunime-creator-hub/test
+miyunime-creator-hub/test-e2e
+miyunime-creator-hub/scripts
