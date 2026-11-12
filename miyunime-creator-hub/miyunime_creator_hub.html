@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Miyunime Creator Hub</title>
+<style>
+:root{
+  --bg:#f6f5f8; --card:#fff; --text:#1c1b22; --sub:#6b6876;
+  --accent:#8b5cf6; --accent2:#ec4899; --border:#e6e3ec;
+  --ok:#16a34a; --warn:#d97706; --bad:#dc2626;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15131a; --card:#1f1c27; --text:#f1eef7; --sub:#a39eb0; --border:#322e3d;
+  }
+}
+:root[data-theme="dark"]{ --bg:#15131a; --card:#1f1c27; --text:#f1eef7; --sub:#a39eb0; --border:#322e3d; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,Segoe UI,Roboto,sans-serif;min-height:100%;}
+header{position:sticky;top:0;padding:14px 16px calc(14px);padding-top:calc(14px + env(safe-area-inset-top,0px));background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+header h1{font-size:17px;margin:0}
+.tabs{display:flex;gap:6px}
+.tabs button{border:none;background:rgba(255,255,255,.2);color:#fff;padding:7px 12px;border-radius:20px;font-size:13px;cursor:pointer}
+.tabs button.active{background:#fff;color:var(--accent)}
+main{max-width:720px;margin:0 auto;padding:16px;overflow-x:hidden}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px}
+.card h2{font-size:14px;margin:0 0 10px;color:var(--sub);text-transform:uppercase;letter-spacing:.04em}
+label{font-size:12px;color:var(--sub);display:block;margin-bottom:4px}
+input,select,textarea{width:100%;padding:9px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-size:14px;margin-bottom:10px}
+textarea{resize:vertical;min-height:50px}
+.btn{display:inline-block;border:none;background:var(--accent);color:#fff;padding:9px 14px;border-radius:8px;font-size:13px;cursor:pointer}
+.btn.outline{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.btn.sm{padding:5px 10px;font-size:12px}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.content-item{border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px}
+.content-item .top{display:flex;justify-content:space-between;gap:8px}
+.badge{font-size:11px;padding:2px 8px;border-radius:20px;white-space:nowrap}
+.badge.draft{background:#e5e7eb;color:#374151}
+.badge.scheduled{background:#dbeafe;color:#1e40af}
+.badge.uploaded{background:#dcfce7;color:#166534}
+.bar{height:8px;border-radius:6px;background:var(--border);overflow:hidden;margin-top:6px}
+.bar>div{height:100%;background:var(--accent)}
+.creator-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.creator-row:last-child{border:none}
+.status{font-weight:600;font-size:13px}
+.status.ok{color:var(--ok)} .status.warn{color:var(--warn)} .status.bad{color:var(--bad)}
+.muted{color:var(--sub);font-size:12px}
+</style>
+</head>
+<body>
+<header>
+  <h1>🐾 Miyunime Creator Hub</h1>
+  <div class="tabs">
+    <button id="tabCreatorBtn" class="active">Creator</button>
+    <button id="tabAdminBtn">Admin</button>
+  </div>
+</header>
+<main>
+  <div id="view"></div>
+</main>
+<script>
+const KEY='miyunime_hub_v1';
+function load(){
+  try{ return JSON.parse(localStorage.getItem(KEY)) }catch(e){ return null }
+}
+function save(d){ try{ localStorage.setItem(KEY, JSON.stringify(d)) }catch(e){} }
+let data = load() || {
+  creators:[
+    {id:'c1', name:'Aiko', quota:4},
+    {id:'c2', name:'Raka', quota:4}
+  ],
+  contents:[],
+  currentCreator:'c1',
+  tab:'creator'
+};
+save(data);
+
+function fmtDate(d){ if(!d) return '-'; return new Date(d).toLocaleDateString('id-ID',{day:'2-digit',month:'short'}) }
+
+function render(){
+  document.getElementById('tabCreatorBtn').classList.toggle('active', data.tab==='creator');
+  document.getElementById('tabAdminBtn').classList.toggle('active', data.tab==='admin');
+  document.getElementById('view').innerHTML = data.tab==='creator' ? creatorView() : adminView();
+  bindEvents();
+}
+
+function periodContents(creatorId){
+  return data.contents.filter(c=>c.creatorId===creatorId);
+}
+function uploadedCount(creatorId){
+  return periodContents(creatorId).filter(c=>c.status==='uploaded').length;
+}
+
+function creatorView(){
+  const c = data.creators.find(x=>x.id===data.currentCreator) || data.creators[0];
+  const items = periodContents(c.id).slice().reverse();
+  const done = uploadedCount(c.id);
+  const pct = Math.min(100, Math.round((done/c.quota)*100));
+  return `
+  <div class="card">
+    <h2>Pilih Creator (demo login)</h2>
+    <select id="creatorSelect">${data.creators.map(x=>`<option value="${x.id}" ${x.id===c.id?'selected':''}>${x.name}</option>`).join('')}</select>
+  </div>
+  <div class="card">
+    <h2>Progres Kuota · ${c.name}</h2>
+    <div class="status ${pct>=100?'ok':pct>=50?'warn':'bad'}">${done} / ${c.quota} konten terupload</div>
+    <div class="bar"><div style="width:${pct}%"></div></div>
+  </div>
+  <div class="card">
+    <h2>Input Konten Baru (pra-upload)</h2>
+    <label>Judul / Topik</label><input id="newTitle" placeholder="mis. Review anime musim ini">
+    <label>Format</label>
+    <select id="newFormat"><option>Feed</option><option>Reels</option><option>Story</option><option>Carousel</option></select>
+    <label>Jadwal Upload</label><input id="newDate" type="date">
+    <label>Caption (opsional)</label><textarea id="newCaption"></textarea>
+    <button class="btn" id="addContentBtn">+ Tambah Konten</button>
+  </div>
+  <div class="card">
+    <h2>Daftar Konten</h2>
+    ${items.length===0?'<div class="muted">Belum ada konten.</div>':''}
+    ${items.map(it=>`
+      <div class="content-item">
+        <div class="top">
+          <strong>${it.title}</strong>
+          <span class="badge ${it.status}">${it.status==='uploaded'?'Sudah Diupload':it.status==='scheduled'?'Terjadwal':'Draft'}</span>
+        </div>
+        <div class="muted">${it.format} · Jadwal: ${fmtDate(it.date)}</div>
+        ${it.status==='uploaded'
+          ? `<div class="muted">Link: ${it.link||'-'} · Diupload: ${fmtDate(it.uploadedAt)}</div>`
+          : `<div class="row" style="margin-top:8px">
+               <input style="flex:1;min-width:160px;margin:0" placeholder="Link Instagram" id="link-${it.id}">
+               <button class="btn sm" data-markup="${it.id}">Tandai Sudah Diupload</button>
+             </div>`
+        }
+      </div>
+    `).join('')}
+  </div>`;
+}
+
+function adminView(){
+  return `
+  <div class="card">
+    <h2>Ringkasan Kuota Semua Creator</h2>
+    ${data.creators.map(c=>{
+      const done = uploadedCount(c.id);
+      const pct = Math.min(100, Math.round((done/c.quota)*100));
+      const statusClass = pct>=100?'ok':pct>=50?'warn':'bad';
+      const statusText = pct>=100?'Terpenuhi':pct>=50?'Dalam Progres':'Terlambat';
+      return `<div class="creator-row">
+        <div>
+          <div><strong>${c.name}</strong></div>
+          <div class="muted">${done} / ${c.quota} konten</div>
+        </div>
+        <div style="text-align:right">
+          <div class="status ${statusClass}">${statusText}</div>
+          <div class="row" style="justify-content:flex-end;margin-top:4px">
+            <button class="btn sm outline" data-quotaminus="${c.id}">-</button>
+            <span class="muted" style="align-self:center">kuota</span>
+            <button class="btn sm outline" data-quotaplus="${c.id}">+</button>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+  </div>
+  <div class="card">
+    <h2>Semua Konten</h2>
+    ${data.contents.length===0?'<div class="muted">Belum ada konten tercatat.</div>':''}
+    ${data.contents.slice().reverse().map(it=>{
+      const owner = data.creators.find(c=>c.id===it.creatorId);
+      return `<div class="content-item">
+        <div class="top"><strong>${it.title}</strong><span class="badge ${it.status}">${it.status==='uploaded'?'Sudah Diupload':it.status==='scheduled'?'Terjadwal':'Draft'}</span></div>
+        <div class="muted">${owner?owner.name:'-'} · ${it.format} · Jadwal ${fmtDate(it.date)}</div>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+function bindEvents(){
+  document.getElementById('tabCreatorBtn').onclick=()=>{data.tab='creator';save(data);render();};
+  document.getElementById('tabAdminBtn').onclick=()=>{data.tab='admin';save(data);render();};
+
+  const sel = document.getElementById('creatorSelect');
+  if(sel) sel.onchange=e=>{data.currentCreator=e.target.value;save(data);render();};
+
+  const addBtn = document.getElementById('addContentBtn');
+  if(addBtn) addBtn.onclick=()=>{
+    const title = document.getElementById('newTitle').value.trim();
+    if(!title){ alert('Judul wajib diisi'); return; }
+    const format = document.getElementById('newFormat').value;
+    const date = document.getElementById('newDate').value;
+    const caption = document.getElementById('newCaption').value;
+    data.contents.push({
+      id:'ct'+Date.now(), creatorId:data.currentCreator, title, format, date,
+      caption, status: date ? 'scheduled':'draft', link:'', uploadedAt:null
+    });
+    save(data); render();
+  };
+
+  document.querySelectorAll('[data-markup]').forEach(btn=>{
+    btn.onclick=()=>{
+      const id = btn.getAttribute('data-markup');
+      const link = document.getElementById('link-'+id).value.trim();
+      const item = data.contents.find(c=>c.id===id);
+      item.status='uploaded'; item.link=link; item.uploadedAt=new Date().toISOString();
+      save(data); render();
+    };
+  });
+
+  document.querySelectorAll('[data-quotaplus]').forEach(btn=>{
+    btn.onclick=()=>{
+      const c = data.creators.find(x=>x.id===btn.getAttribute('data-quotaplus'));
+      c.quota++; save(data); render();
+    };
+  });
+  document.querySelectorAll('[data-quotaminus]').forEach(btn=>{
+    btn.onclick=()=>{
+      const c = data.creators.find(x=>x.id===btn.getAttribute('data-quotaminus'));
+      c.quota=Math.max(1,c.quota-1); save(data); render();
+    };
+  });
+}
+render();
+</script>
+</body>
+</html>
