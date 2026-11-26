@@ -1,0 +1,56 @@
+
+=== 1. Start tanpa akun (database kosong): peringatan NO_USERS ===
+{"Time":"2026-11-04T03:36:52.239Z","Level":"info","Event":"SERVER_STARTED","Url":"http://127.0.0.1:3201","Database":"<tmp>/contoh.db"}
+{"Time":"2026-11-04T03:36:52.240Z","Level":"warn","Event":"NO_USERS","Message":"Database belum berisi akun. Jalankan \"npm run seed\" terlebih dahulu."}
+{"Time":"2026-11-04T03:36:53.487Z","Level":"info","Event":"SERVER_STOPPING","Signal":"SIGTERM"}
+
+=== 2. Seed lalu start normal, permintaan sah, login benar dan salah, token palsu ===
+{"Time":"2026-11-04T03:36:54.081Z","Level":"info","Event":"SERVER_STARTED","Url":"http://127.0.0.1:3202","Database":"<tmp>/contoh.db"}
+{"Time":"2026-11-04T03:36:55.364Z","Level":"info","Event":"REQUEST","RequestId":"bdd2385f","Method":"GET","Path":"/healthz","Status":200,"Ms":8,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.421Z","Level":"info","RequestId":"9ef86179","Event":"LOGIN_OK","UserId":2,"Role":"CREATOR"}
+{"Time":"2026-11-04T03:36:55.426Z","Level":"info","Event":"REQUEST","RequestId":"9ef86179","Method":"POST","Path":"/api/login","Status":200,"Ms":58,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.438Z","Level":"info","Event":"REQUEST","RequestId":"3f239b71","Method":"GET","Path":"/api/dashboard/me","Status":200,"Ms":6,"UserId":2,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.442Z","Level":"info","Event":"REQUEST","RequestId":"caa6e656","Method":"POST","Path":"/api/contents","Status":400,"Ms":2,"UserId":2,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.454Z","Level":"info","Event":"REQUEST","RequestId":"6a739fd2","Method":"GET","Path":"/api/contents","Status":200,"Ms":5,"UserId":2,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.456Z","Level":"info","Event":"AUTH_REJECTED","RequestId":"3d74f9cb","Method":"GET","Path":"/api/contents","Status":401,"Ms":0,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.463Z","Level":"info","Event":"REQUEST","RequestId":"005739b8","Method":"GET","Path":"/api/reports/quota.csv","Status":403,"Ms":1,"UserId":2,"Ip":"127.0.0.1"}
+
+=== 3. Brute force login: 5 gagal lalu diblokir (429) ===
+{"Time":"2026-11-04T03:36:55.817Z","Level":"warn","RequestId":"2726fc6c","Event":"LOGIN_FAILED","Email":"s***@miyunime.id","Ip":"127.0.0.1","Attempt":1}
+{"Time":"2026-11-04T03:36:55.819Z","Level":"info","Event":"REQUEST","RequestId":"2726fc6c","Method":"POST","Path":"/api/login","Status":401,"Ms":47,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.869Z","Level":"warn","RequestId":"d147b9b7","Event":"LOGIN_FAILED","Email":"s***@miyunime.id","Ip":"127.0.0.1","Attempt":2}
+{"Time":"2026-11-04T03:36:55.871Z","Level":"info","Event":"REQUEST","RequestId":"d147b9b7","Method":"POST","Path":"/api/login","Status":401,"Ms":46,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.924Z","Level":"warn","RequestId":"c7a03b64","Event":"LOGIN_FAILED","Email":"s***@miyunime.id","Ip":"127.0.0.1","Attempt":3}
+{"Time":"2026-11-04T03:36:55.926Z","Level":"info","Event":"REQUEST","RequestId":"c7a03b64","Method":"POST","Path":"/api/login","Status":401,"Ms":49,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:55.975Z","Level":"warn","RequestId":"c192dc68","Event":"LOGIN_FAILED","Email":"s***@miyunime.id","Ip":"127.0.0.1","Attempt":4}
+{"Time":"2026-11-04T03:36:55.976Z","Level":"info","Event":"REQUEST","RequestId":"c192dc68","Method":"POST","Path":"/api/login","Status":401,"Ms":45,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:56.025Z","Level":"warn","RequestId":"f4a3117a","Event":"LOGIN_FAILED","Email":"s***@miyunime.id","Ip":"127.0.0.1","Attempt":5}
+{"Time":"2026-11-04T03:36:56.026Z","Level":"info","Event":"REQUEST","RequestId":"f4a3117a","Method":"POST","Path":"/api/login","Status":401,"Ms":44,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:56.032Z","Level":"warn","RequestId":"f9e8e7ae","Event":"LOGIN_BLOCKED","Email":"s***@miyunime.id","Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:56.033Z","Level":"info","Event":"REQUEST","RequestId":"f9e8e7ae","Method":"POST","Path":"/api/login","Status":429,"Ms":1,"UserId":null,"Ip":"127.0.0.1"}
+
+=== 4. Isi permintaan terlalu besar (413) dan JSON rusak (400) ===
+Status respons untuk isi 200 KB: 413{"Time":"2026-11-04T03:36:56.345Z","Level":"info","Event":"BODY_TOO_LARGE","RequestId":"fdd3ace7","Method":"POST","Path":"/api/contents","Status":413,"Ms":2,"UserId":2,"Ip":"127.0.0.1"}
+
+{"Time":"2026-11-04T03:36:56.352Z","Level":"info","Event":"BAD_REQUEST","RequestId":"df40d620","Method":"POST","Path":"/api/contents","Status":400,"Ms":1,"UserId":2,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:56.654Z","Level":"info","Event":"SERVER_STOPPING","Signal":"SIGTERM"}
+
+=== 5. Galat tak terduga (500): tabel ContentReview dihapus dari database saat server berjalan ===
+{"Time":"2026-11-04T03:36:56.907Z","Level":"info","Event":"SERVER_STARTED","Url":"http://127.0.0.1:3203","Database":"<tmp>/contoh.db"}
+{"Time":"2026-11-04T03:36:58.225Z","Level":"info","RequestId":"63a0555b","Event":"LOGIN_OK","UserId":2,"Role":"CREATOR"}
+{"Time":"2026-11-04T03:36:58.229Z","Level":"info","Event":"REQUEST","RequestId":"63a0555b","Method":"POST","Path":"/api/login","Status":200,"Ms":56,"UserId":null,"Ip":"127.0.0.1"}
+{"Time":"2026-11-04T03:36:58.266Z","Level":"error","Event":"UNHANDLED_ERROR","ErrorId":"6f27f099","RequestId":"49c9bf53","Method":"GET","Path":"/api/contents","Error":"no such table: ContentReview","Stack":["Error: no such table: ContentReview","at Object.ListContents [as Handler] (<proyek>/src/content.ts:112:6)","at Server.<anonymous> (<proyek>/src/server.ts:173:24)","at Server.emit (node:events:519:28)"]}
+{"Time":"2026-11-04T03:36:58.267Z","Level":"error","Event":"UNHANDLED_ERROR","RequestId":"49c9bf53","Method":"GET","Path":"/api/contents","Status":500,"Ms":2,"UserId":2,"Ip":"127.0.0.1"}
+Respons yang diterima pengguna:
+HTTP/1.1 500 Internal Server Error
+X-Request-Id: 49c9bf53
+{"Message":"Terjadi kesalahan pada server. Sebutkan kode 6f27f099 saat melapor.","ErrorId":"6f27f099"}
+{"Time":"2026-11-04T03:36:58.570Z","Level":"info","Event":"SERVER_STOPPING","Signal":"SIGTERM"}
+
+=== 6. Port sudah dipakai (EADDRINUSE) ===
+{"Time":"2026-11-04T03:36:59.329Z","Level":"error","Event":"SERVER_START_FAILED","Code":"EADDRINUSE","Message":"Port 3204 sudah dipakai. Jalankan dengan PORT=<port lain>."}
+exit code: 1
+
+=== 7. PORT tidak valid ===
+PORT tidak valid: "abc". Gunakan angka 1 sampai 65535.
+exit code: 1
